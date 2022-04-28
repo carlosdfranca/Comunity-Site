@@ -35,33 +35,33 @@
                                 </div>
                             {% else %}
                                 {{ form_criar_conta.email(class="form-control") }}
-                            {% endif %}}
+                            {% endif %}
                         </div>
                         <div class='form-group'>
-                            {{ form_criar_conta.senha.label(class="form-control-label") }}
-                            {% if form_criar_conta.senha.errors %}
-                                {{ form_criar_conta.senha(class="form-control is-invalid") }}
+                            {{ form_criar_conta.password.label(class="form-control-label") }}
+                            {% if form_criar_conta.password.errors %}
+                                {{ form_criar_conta.password(class="form-control is-invalid") }}
                                 <div class="invalid-feedback">
-                                    {% for error in form_criar_conta.senha.errors %}
+                                    {% for error in form_criar_conta.password.errors %}
                                         {{ error }}
                                     {% endfor %}
                                 </div>
                             {% else %}
-                                {{ form_criar_conta.senha(class="form-control") }}
-                            {% endif %}}
+                                {{ form_criar_conta.password(class="form-control") }}
+                            {% endif %}
                         </div>
                         <div class='form-group'>
-                            {{ form_criar_conta.confirm_senha.label(class="form-control-label") }}
-                            {% if form_criar_conta.confirm_senha.errors %}
-                                {{ form_criar_conta.confirm_senha(class="form-control is-invalid") }}
+                            {{ form_criar_conta.confirm_password.label(class="form-control-label") }}
+                            {% if form_criar_conta.confirm_password.errors %}
+                                {{ form_criar_conta.confirm_password(class="form-control is-invalid") }}
                                 <div class="invalid-feedback">
-                                    {% for error in form_criar_conta.confirm_senha.errors %}
+                                    {% for error in form_criar_conta.confirm_password.errors %}
                                         {{ error }}
                                     {% endfor %}
                                 </div>
                             {% else %}
-                                {{ form_criar_conta.confirm_senha(class="form-control") }}
-                            {% endif %}}
+                                {{ form_criar_conta.confirm_password(class="form-control") }}
+                            {% endif %}
                         </div>
                     </fieldset>
                     {{ form_criar_conta.botao_submit_criarconta(class="btn btn-primary mt-2") }}
@@ -86,16 +86,16 @@
                             {% endif %}
                         </div>
                         <div class="form-group">
-                            {{ form_login.senha.label(class="form-control-label") }}
-                            {% if form_login.senha.errors %}
-                                {{ form_login.senha(class="form-control is-invalid") }}
+                            {{ form_login.password.label(class="form-control-label") }}
+                            {% if form_login.password.errors %}
+                                {{ form_login.password(class="form-control is-invalid") }}
                                 <div class="invalid-feedback">
-                                    {% for error in form_login.senha.errors %}
+                                    {% for error in form_login.password.errors %}
                                         {{ error }}
                                     {% endfor %}
                                 </div>
                             {% else %}
-                                {{ form_login.senha(class="form-control") }}
+                                {{ form_login.password(class="form-control") }}
                             {% endif %}
                         </div>
                         <div class="form-group">
