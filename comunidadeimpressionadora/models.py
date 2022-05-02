@@ -11,6 +11,7 @@ class Usuario(database.Model, UserMixin):
     id = database.Column(database.Integer, primary_key=True)
     username = database.Column(database.String, nullable=False)
     email = database.Column(database.String, nullable=False, unique=True)
+    phone_number = database.Column(database.Integer)
     password = database.Column(database.String, nullable=False)
     profile_photo = database.Column(database.String, nullable=False, default='default.jpg')
     posts = database.relationship('Post', backref='author', lazy=True)
