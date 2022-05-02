@@ -14,6 +14,9 @@ class Usuario(database.Model, UserMixin):
     phone_number = database.Column(database.Integer)
     password = database.Column(database.String, nullable=False)
     profile_photo = database.Column(database.String, nullable=False, default='default.jpg')
+    facebook = database.Column(database.String)
+    instagram = database.Column(database.String)
+    github = database.Column(database.String)
     posts = database.relationship('Post', backref='author', lazy=True)
     cursos = database.Column(database.String, nullable=False, default='Não informado')
     

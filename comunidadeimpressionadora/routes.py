@@ -46,6 +46,7 @@ def login():
         usuario = Usuario(username=form_criar_conta.username.data, email=form_criar_conta.email.data, password=senha_cript)
         database.session.add(usuario)
         database.session.commit()
+        login_user(usuario)
         flash(f'Conta criada para o e-mail: {form_criar_conta.email.data}', 'alert-success')
         return redirect(url_for('home'))
     
