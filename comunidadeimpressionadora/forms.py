@@ -1,7 +1,9 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from flask_wtf.file import FileField, FileAllowed
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, URL, NumberRange
 from comunidadeimpressionadora.models import Usuario
+from flask_login import current_user
 
 class FormCriarConta(FlaskForm):
     username = StringField('Nome de Usuário', validators=[DataRequired()])
@@ -25,8 +27,15 @@ class FormLogin(FlaskForm):
 class FormEditarPerfil(FlaskForm):
     username = StringField('Nome de Usuário', validators=[DataRequired()])
     email = StringField('E-mail', validators=[DataRequired(), Email()])
-    phone_number = StringField('Número do Telefone', validators=[NumberRange(min=10000000000, max=99999999999)])
+    profile_photo = FileField('Atualizar foto de Perfil', validators=[FileAllowed(['jpg', 'png'])])
+    phone_number = IntegerField('Número do Telefone', validators=[NumberRange(min=10000000000, max=99999999999)])
     facebook = StringField('Facebook', validators=[URL()])
     instagram = StringField('Instagram', validators=[URL()])
     github = StringField('Github', validators=[URL()])
     botao_submit_editarperfil = SubmitField('Confirmar Edição')
+    
+    def validate_email(self, email):
+        if current_user.email != email.data:
+            usuario = Usuario.query.filter_by(email=email.data).first()
+            if usuario:
+                raise ValidationError('Esse e-mail já foi cadastrado por outro usuário. Cadastre outro e-mail.')
