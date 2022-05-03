@@ -29,9 +29,9 @@ class FormEditarPerfil(FlaskForm):
     email = StringField('E-mail', validators=[DataRequired(), Email()])
     profile_photo = FileField('Atualizar foto de Perfil', validators=[FileAllowed(['jpg', 'png'])])
     phone_number = IntegerField('Número do Telefone', validators=[NumberRange(min=10000000000, max=99999999999)])
-    facebook = StringField('Facebook', validators=[URL()])
-    instagram = StringField('Instagram', validators=[URL()])
-    github = StringField('Github', validators=[URL()])
+    facebook = StringField('Facebook')
+    instagram = StringField('Instagram')
+    github = StringField('Github')
     botao_submit_editarperfil = SubmitField('Confirmar Edição')
     
     def validate_email(self, email):
