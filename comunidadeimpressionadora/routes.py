@@ -2,7 +2,7 @@ from fileinput import filename
 from flask import render_template, redirect, url_for, flash, request
 import flask
 from comunidadeimpressionadora import app, database, Bcrypt
-from comunidadeimpressionadora.forms import FormLogin, FormCriarConta
+from comunidadeimpressionadora.forms import FormLogin, FormCriarConta, FormEditarPerfil
 from comunidadeimpressionadora.models import Usuario
 from flask_login import login_user, logout_user, current_user, login_required
 
@@ -72,7 +72,9 @@ def perfil():
 def criar_post():
     return render_template('criarpost.html')
 
-@app.route('/perfil/editar')
+@app.route('/perfil/editar', methods=['GET', 'POST'])
 @login_required
 def editar_perfil():
-    return render_template('editarperfil.html')
+    form = FormEditarPerfil()
+    foto_perfil = url_for('static', filename='fotos_perfil/{}'.format(current_user.profile_photo))
+    return render_template('editarperfil.html', foto_perfil=foto_perfil, form=form)

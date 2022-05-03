@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, URL, NumberRange
 from comunidadeimpressionadora.models import Usuario
 
 class FormCriarConta(FlaskForm):
@@ -21,3 +21,12 @@ class FormLogin(FlaskForm):
     password = PasswordField('Senha', validators=[DataRequired(), Length(6, 20)])
     lembrar_dados = BooleanField('Lembrar dados de acesso')
     botao_submit_login = SubmitField('Fazer Login')
+    
+class FormEditarPerfil(FlaskForm):
+    username = StringField('Nome de Usuário', validators=[DataRequired()])
+    email = StringField('E-mail', validators=[DataRequired(), Email()])
+    phone_number = StringField('Número do Telefone', validators=[NumberRange(min=10000000000, max=99999999999)])
+    facebook = StringField('Facebook', validators=[URL()])
+    instagram = StringField('Instagram', validators=[URL()])
+    github = StringField('Github', validators=[URL()])
+    botao_submit_editarperfil = SubmitField('Confirmar Edição')
