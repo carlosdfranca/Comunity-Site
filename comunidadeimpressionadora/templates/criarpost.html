@@ -6,7 +6,7 @@
             <div class='col col-lg-7 mb-4 mb-lg-0'>
                 <form method='POST' action='' class="border p-4 mt-2">
                     {{ form.csrf_token }}
-                    <legend>Criar Post</legend>
+                    <legend style="color: #0092ff"1>Criar Post</legend>
                     <fieldset>
                         <div class="form-group pb-2">
                             {{ form.titulo.label(class="form-control-label") }}
@@ -36,7 +36,7 @@
                         </div>
                     </fieldset>
                     <div class="d-flex justify-content-end pt-2">
-                        {{ form.botao_submit_criarpost(class="btn btn-dark mt-2") }}
+                        {{ form.botao_submit_criarpost(class="btn btn-primary mt-2") }}
                     </div>
                 </form>
             </div>
