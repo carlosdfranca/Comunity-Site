@@ -13,7 +13,7 @@ class Usuario(database.Model, UserMixin):
     email = database.Column(database.String, nullable=False, unique=True)
     phone_number = database.Column(database.Integer)
     password = database.Column(database.String, nullable=False)
-    profile_photo = database.Column(database.String, nullable=False, default='default.jpg')
+    profile_photo = database.Column(database.String, nullable=False, default='default.png')
     facebook = database.Column(database.String)
     instagram = database.Column(database.String)
     github = database.Column(database.String)
