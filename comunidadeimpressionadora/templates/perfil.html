@@ -40,8 +40,14 @@
 
                                 <div class="row pt-1">
                                     <div class="col-6 mb-3">
-                                        <h6>Cursos</h6>
-                                        <p class="text-muted">0</p>
+                                        <h6>Linguagens Conhecidas</h6>
+                                        {% if 'Não informado' in current_user.cursos or current_user.cursos == '' %}
+                                            <p class="text-muted">Não Informado</p>
+                                        {% else %}
+                                            {% for curso in current_user.cursos.split(';') %}
+                                                <button type="button" class="btn btn-dark mb-2 me-1" disabled>{{ curso }}</button>
+                                            {% endfor %}
+                                        {% endif %}
                                     </div>
                                     <div class="col-6 mb-3">
                                         <h6>Posts</h6>

@@ -102,8 +102,13 @@
                     {% for campo in form %}
                         {% if 'ling_' in campo.name %}    
                             <div class="form-group">
-                                {{ campo(class="form-check-input") }}
-                                {{ campo.label(class="form-check-label") }}
+                                {% if campo.label.text in current_user.cursos %}
+                                    {{ campo(class="form-check-input", checked='checked') }}
+                                    {{ campo.label(class="form-check-label") }}
+                                {% else %}
+                                    {{ campo(class="form-check-input") }}
+                                    {{ campo.label(class="form-check-label") }}
+                                {% endif %}
                             </div>
                         {% endif %}
                     {% endfor %}

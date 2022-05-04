@@ -76,7 +76,7 @@ def perfil():
 def criar_post():
     return render_template('criarpost.html')
 
-
+# método criado para Atualizar a foto de Perfil
 def salvar_imagem(imagem):
     
     # tratando o nome
@@ -96,21 +96,45 @@ def salvar_imagem(imagem):
     
     return nome_arquivo
 
+
+# Método criado para atualizar os cursos do perfil
+def atualizar_cursos(form):
+    lista_cursos = []
+    # Percorrer o formulário pegando só os campos com "ling_"
+    for campo in form:
+        if 'ling_' in campo.name:
+            # Adicionar o campo.label na lista de cursos os selecionados para
+            if campo.data:
+                lista_cursos.append(campo.label.text)    
+    # transformar a lista numa string separadando os cursos com ";"
+    return ';'.join(lista_cursos)
+
+
 @app.route('/perfil/editar', methods=['GET', 'POST'])
 @login_required
 def editar_perfil():
     form = FormEditarPerfil()
     if form.validate_on_submit():
+        # Atualizando dados
         current_user.username = form.username.data
         current_user.email = form.email.data
         current_user.phone_number = form.phone_number.data
         current_user.facebook = form.facebook.data
         current_user.instagram = form.instagram.data
         current_user.github = form.github.data
+        
+        # Atualizando a foto do perfil
         if form.profile_photo.data:
             nome_imagem = salvar_imagem(form.profile_photo.data)
             current_user.profile_photo = nome_imagem
+            
+        # Atualizando as linguagens conhecidas
+        current_user.cursos = atualizar_cursos(form)
+
+        
+        # Commitando no banco de dados
         database.session.commit()
+        
         flash('Perfil Atualizado com Sucesso!', 'alert-success')
         return redirect(url_for('perfil'))
     elif request.method == 'GET':
