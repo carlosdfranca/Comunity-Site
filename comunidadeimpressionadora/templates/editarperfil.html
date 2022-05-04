@@ -87,7 +87,7 @@
                             {{ form.github(class="form-control") }}
                         {% endif %}
                     </div>
-                    <div class="form-group mt-2">
+                    <div class="form-group mt-3">
                         {{ form.profile_photo.label }}
                         {{ form.profile_photo(class="form-control-file") }}
                         {% if form.profile_photo.errors %}
@@ -96,6 +96,18 @@
                             {% endfor %}
                         {% endif %}
                     </div>
+
+                    <hr>
+                    <h4>Linguagens Conhecidas</h4>
+                    {% for campo in form %}
+                        {% if 'ling_' in campo.name %}    
+                            <div class="form-group">
+                                {{ campo(class="form-check-input") }}
+                                {{ campo.label(class="form-check-label") }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+
                 </fieldset>
                 {{ form.botao_submit_editarperfil(class="btn btn-outline-dark mt-2") }}
             </form>

@@ -32,6 +32,15 @@ class FormEditarPerfil(FlaskForm):
     facebook = StringField('Facebook')
     instagram = StringField('Instagram')
     github = StringField('Github')
+    
+    ling_python = BooleanField('Python')
+    ling_php = BooleanField('PHP')
+    ling_c = BooleanField('C#')
+    ling_java = BooleanField('Java')
+    ling_sql = BooleanField('SQL')
+    ling_htmlCss = BooleanField('HTML/CSS')
+    ling_javascript = BooleanField('JavaScript')
+    
     botao_submit_editarperfil = SubmitField('Confirmar Edição')
     
     def validate_email(self, email):
