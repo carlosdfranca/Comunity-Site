@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+    <div class = 'container mt-3'>
+        <div class="row d-flex justify-content-center align-items-center pt-3">
+            <div class = 'col col-lg-8 mb-4 mb-lg-0'>
+                <div class="row border border-1 border-primary my-4 p-3 post-gradient">
+                    <div class="col col-2">
+                        <div class="col text-center">
+                            <img src="{{ url_for('static', filename='fotos_perfil/{}'.format(post.author.profile_photo)) }}" alt="Avatar" class="img-fluid my-4 circle-image" style="width: 100px;" /><br>
+                            <strong>{{ post.author.username }}</strong>
+
+                            <div class="row justify-content-center">
+                                {% if 'Não informado' in post.author.cursos or post.author.cursos == '' %}
+                                    <br>
+                                {% else %}
+                                    {% for curso in post.author.cursos.split(';') %}
+                                        <button type="button" class="btn btn-primary mb-2 me-1" disabled>{{ curso }}</button>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col col-10">
+                        <form method='POST' action='' class="border-0 p-2 mt-2">
+                            {{ form.csrf_token }}
+                            <legend style="color: #0092ff"1>Editar Post</legend>
+                            <fieldset>
+                                <div class="form-group pb-2">
+                                    {{ form.titulo.label(class="form-control-label") }}
+                                    {% if form.titulo.errors %}
+                                        {{ form.titulo(class="form-control is-invalid") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.titulo.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.titulo(class="form-control") }}
+                                    {% endif %}
+                                </div>
+                                <div class="form-group">
+                                    {{ form.corpo.label(class="form-control-label") }}
+                                    {% if form.corpo.errors %}
+                                        {{ form.corpo(class="form-control is-invalid") }}
+                                        <div class="invalid-feedback">
+                                            {% for error in form.corpo.errors %}
+                                                {{ error }}
+                                            {% endfor %}
+                                        </div>
+                                    {% else %}
+                                        {{ form.corpo(class="form-control") }}
+                                    {% endif %}
+                                </div>
+                            </fieldset>
+                            <div class="d-flex justify-content-end pt-2">
+                                {{ form.botao_submit_criarpost(class='btn btn-primary') }}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

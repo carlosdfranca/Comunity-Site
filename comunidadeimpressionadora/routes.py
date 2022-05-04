@@ -1,20 +1,19 @@
 from fileinput import filename
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, abort
 import flask
 from comunidadeimpressionadora import app, database, Bcrypt
-from comunidadeimpressionadora.forms import FormLogin, FormCriarConta, FormEditarPerfil
-from comunidadeimpressionadora.models import Usuario
+from comunidadeimpressionadora.forms import FormLogin, FormCriarConta, FormEditarPerfil, FormCriarPost
+from comunidadeimpressionadora.models import Usuario, Post
 from flask_login import login_user, logout_user, current_user, login_required
 import secrets
 import os
 from PIL import Image
 
 
-lista_usuarios = ['Carlos', 'Fulano', 'Ciclano', 'Beutrano']
-
 @app.route('/')
 def home():
-    return render_template('home.html')
+    posts = Post.query.order_by(Post.id.desc())
+    return render_template('home.html', posts=posts)
 
 
 @app.route('/contato')
@@ -25,6 +24,7 @@ def contato():
 @app.route('/usuarios')
 @login_required
 def usuarios():
+    lista_usuarios = Usuario.query.all()
     return render_template('usuarios.html', lista_usuarios=lista_usuarios)
 
 
@@ -71,12 +71,21 @@ def perfil():
     foto_perfil = url_for('static', filename='fotos_perfil/{}'.format(current_user.profile_photo))
     return render_template('perfil.html', foto_perfil=foto_perfil)
 
-@app.route('/post/criar')
+@app.route('/post/criar', methods=['GET', 'POST'])
 @login_required
 def criar_post():
-    return render_template('criarpost.html')
+    
+    form = FormCriarPost()
+    if form.validate_on_submit():
+        post = Post(titulo=form.titulo.data, corpo=form.corpo.data, author=current_user)
+        database.session.add(post)
+        database.session.commit()
+        flash('Post criado com sucesso!', 'alert-success')
+        return redirect(url_for('home'))
+    
+    return render_template('criarpost.html', form=form)
 
-
+# método criado para Atualizar a foto de Perfil
 def salvar_imagem(imagem):
     
     # tratando o nome
@@ -96,21 +105,45 @@ def salvar_imagem(imagem):
     
     return nome_arquivo
 
+
+# Método criado para atualizar os cursos do perfil
+def atualizar_cursos(form):
+    lista_cursos = []
+    # Percorrer o formulário pegando só os campos com "ling_"
+    for campo in form:
+        if 'ling_' in campo.name:
+            # Adicionar o campo.label na lista de cursos os selecionados para
+            if campo.data:
+                lista_cursos.append(campo.label.text)    
+    # transformar a lista numa string separadando os cursos com ";"
+    return ';'.join(lista_cursos)
+
+
 @app.route('/perfil/editar', methods=['GET', 'POST'])
 @login_required
 def editar_perfil():
     form = FormEditarPerfil()
     if form.validate_on_submit():
+        # Atualizando dados
         current_user.username = form.username.data
         current_user.email = form.email.data
         current_user.phone_number = form.phone_number.data
         current_user.facebook = form.facebook.data
         current_user.instagram = form.instagram.data
         current_user.github = form.github.data
+        
+        # Atualizando a foto do perfil
         if form.profile_photo.data:
             nome_imagem = salvar_imagem(form.profile_photo.data)
             current_user.profile_photo = nome_imagem
+            
+        # Atualizando as linguagens conhecidas
+        current_user.cursos = atualizar_cursos(form)
+
+        
+        # Commitando no banco de dados
         database.session.commit()
+        
         flash('Perfil Atualizado com Sucesso!', 'alert-success')
         return redirect(url_for('perfil'))
     elif request.method == 'GET':
@@ -122,3 +155,33 @@ def editar_perfil():
         form.github.data = current_user.github
     foto_perfil = url_for('static', filename='fotos_perfil/{}'.format(current_user.profile_photo))
     return render_template('editarperfil.html', foto_perfil=foto_perfil, form=form)
+
+
+@app.route('/post/<post_id>', methods=['GET', 'POST'])
+@login_required
+def exibir_post(post_id):
+    post = Post.query.get(post_id)
+    form = FormCriarPost()
+    if request.method == 'GET':
+        form.titulo.data = post.titulo
+        form.corpo.data = post.corpo
+    elif form.validate_on_submit():
+        post.titulo = form.titulo.data
+        post.corpo = form.corpo.data
+        database.session.commit()
+        flash('Post Atualizado!', 'alert-success')
+        return redirect(url_for('home'))
+    return render_template('post.html', post=post, form=form)
+
+
+@app.route('/post/<post_id>/excluir', methods=['GET', 'POST'])
+@login_required
+def excluir_post(post_id):
+    post = Post.query.get(post_id)
+    if current_user == post.author:
+        database.session.delete(post)
+        database.session.commit()
+        flash('O Post foi excluido com sucesso!', 'alert-danger')
+        return redirect(url_for('home'))
+    else:
+        abort(403)

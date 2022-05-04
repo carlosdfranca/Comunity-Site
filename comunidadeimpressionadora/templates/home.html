@@ -2,10 +2,86 @@
 
 {% block body %}
 
-    <div class = 'container'>
-        <h1>Essa vai ser a Homepage da Página</h1>
-        <p>Esse site ta ficando legal</p>
-        <h2>Testando novo arquivo</h2>
+    <div class = 'container mt-3'>
+        <div class="row d-flex justify-content-center align-items-center pt-3">
+            <div class = 'col col-lg-8 mb-4 mb-lg-0'>
+                <h1 style="color: #006bff">Comunidade Impressionadora</h1>
+                <h2>Alunos Experts e a galera da Hashtag em um só lugar</h2>
+                <hr>
+                {% for post in posts %}
+                    <div class="row border border-1 border-primary my-4 p-3 post-gradient">
+                        <div class="col col-2">
+                            <div class="col text-center">
+                                <img src="{{ url_for('static', filename='fotos_perfil/{}'.format(post.author.profile_photo)) }}" alt="Avatar" class="img-fluid my-4 circle-image" style="width: 100px;" /><br>
+                                <strong>{{ post.author.username }}</strong>
+
+                                <div class="row justify-content-center">
+                                    {% if 'Não informado' in post.author.cursos or post.author.cursos == '' %}
+                                        <br>
+                                    {% else %}
+                                        {% for curso in post.author.cursos.split(';') %}
+                                            <button type="button" class="btn btn-primary mb-2 me-1" disabled>{{ curso }}</button>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col col-10">
+                            <div class="row">
+                                <div class="col-6">
+                                    <h4>
+                                        {{ post.titulo }}
+                                    </h4> 
+                                </div>
+                                <div class="col-4">
+                                    <small class="text-muted" style="font-size: 15px">Ultima Atualização: {{ post.data_criacao.strftime('%d/%m/%Y') }}</small>
+                                </div>
+                                {% if post.author == current_user %}
+                                    <div class="col d-flex justify-content-end">
+                                        <a href="{{ url_for('exibir_post', post_id=post.id) }}" class="border-0">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pen" viewBox="0 0 16 16">
+                                                <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001zm-.644.766a.5.5 0 0 0-.707 0L1.95 11.756l-.764 3.057 3.057-.764L14.44 3.854a.5.5 0 0 0 0-.708l-1.585-1.585z"/>
+                                            </svg>
+                                        </a>
+                                        <a href="!#" class="border-0 ps-2 text-danger" data-bs-toggle="modal" data-bs-target="#excluirPost">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
+                                                <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                    <div class="modal fade" id="excluirPost" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="exampleModalLabel">Excluir Post</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Você realmente deseja excluir esse Post? (Essa ação não pode ser desfeita).
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <form method="POST" action="{{ url_for('excluir_post', post_id=post.id) }}">
+                                                        <button type="submit" class="btn btn-danger">Excluir</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                <div>
+
+                                </div>
+                            </div>
+                            <div class="pt-3"><p>{{ post.corpo }}</p></div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
+
+
 
 {% endblock %}
