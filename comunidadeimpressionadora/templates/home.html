@@ -3,20 +3,38 @@
 {% block body %}
 
     <div class = 'container mt-3'>
-        <h1 style="color: #006bff">Comunidade Impressionadora</h1>
-        <h2>Alunos Experts e a galera da Hashtag em um só lugar</h2>
-        <hr>
-        {% for post in posts %}
-            <div class="row border border-1 border-primary mt-4 p-3 post-gradient">
-                <div class="col col-3">
+        <div class="row d-flex justify-content-center align-items-center pt-3">
+            <div class = 'col col-lg-8 mb-4 mb-lg-0'>
+                <h1 style="color: #006bff">Comunidade Impressionadora</h1>
+                <h2>Alunos Experts e a galera da Hashtag em um só lugar</h2>
+                <hr>
+                {% for post in posts %}
+                    <div class="row border border-1 border-primary my-4 p-3 post-gradient">
+                        <div class="col col-2">
+                            <div class="col text-center">
+                                <img src="{{ url_for('static', filename='fotos_perfil/{}'.format(post.author.profile_photo)) }}" alt="Avatar" class="img-fluid my-4 circle-image" style="width: 100px;" /><br>
+                                <strong>{{ post.author.username }}</strong>
 
-                </div>
-                <div class="col col-9">
-                    <h3>{{ post.titulo }}</h3>
-                    <p>{{ post.corpo }}</p>
-                </div>
+                                <div class="row justify-content-center">
+                                    {% if 'Não informado' in post.author.cursos or post.author.cursos == '' %}
+                                        <br>
+                                    {% else %}
+                                        {% for curso in post.author.cursos.split(';') %}
+                                            <button type="button" class="btn btn-primary mb-2 me-1" disabled>{{ curso }}</button>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col col-10">
+                            <h3>{{ post.titulo }}</h3>
+                            <p>{{ post.corpo }}</p>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
-        {% endfor %}
+        </div>
     </div>
 
 {% endblock %}

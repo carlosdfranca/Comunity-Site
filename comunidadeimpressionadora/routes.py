@@ -12,7 +12,7 @@ from PIL import Image
 
 @app.route('/')
 def home():
-    posts = Post.query.all()
+    posts = Post.query.order_by(Post.id.desc())
     return render_template('home.html', posts=posts)
 
 
@@ -155,3 +155,4 @@ def editar_perfil():
         form.github.data = current_user.github
     foto_perfil = url_for('static', filename='fotos_perfil/{}'.format(current_user.profile_photo))
     return render_template('editarperfil.html', foto_perfil=foto_perfil, form=form)
+
