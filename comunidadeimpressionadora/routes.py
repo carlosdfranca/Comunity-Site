@@ -157,7 +157,18 @@ def editar_perfil():
     return render_template('editarperfil.html', foto_perfil=foto_perfil, form=form)
 
 
-@app.route('/post/<post_id>')
+@app.route('/post/<post_id>', methods=['GET', 'POST'])
+@login_required
 def exibir_post(post_id):
     post = Post.query.get(post_id)
-    return render_template('post.html', post=post)
+    form = FormCriarPost()
+    if request.method == 'GET':
+        form.titulo.data = post.titulo
+        form.corpo.data = post.corpo
+    elif form.validate_on_submit():
+        post.titulo = form.titulo.data
+        post.corpo = form.corpo.data
+        database.session.commit()
+        flash('Post Atualizado!', 'alert-success')
+        return redirect(url_for('home'))
+    return render_template('post.html', post=post, form=form)
