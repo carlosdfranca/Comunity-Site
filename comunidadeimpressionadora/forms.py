@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, URL, NumberRange
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, URL, NumberRange, Optional
 from comunidadeimpressionadora.models import Usuario
 from flask_login import current_user
 
@@ -28,7 +28,7 @@ class FormEditarPerfil(FlaskForm):
     username = StringField('Nome de Usuário', validators=[DataRequired()])
     email = StringField('E-mail', validators=[DataRequired(), Email()])
     profile_photo = FileField('Atualizar foto de Perfil', validators=[FileAllowed(['jpg', 'png'])])
-    phone_number = IntegerField('Número do Telefone', validators=[NumberRange(min=10000000000, max=99999999999)])
+    phone_number = IntegerField('Número do Telefone', validators=[Optional()])
     facebook = StringField('Facebook')
     instagram = StringField('Instagram')
     github = StringField('Github')

@@ -10,8 +10,6 @@ import os
 from PIL import Image
 
 
-lista_usuarios = ['Carlos', 'Fulano', 'Ciclano', 'Beutrano']
-
 @app.route('/')
 def home():
     return render_template('home.html')
@@ -25,6 +23,7 @@ def contato():
 @app.route('/usuarios')
 @login_required
 def usuarios():
+    lista_usuarios = Usuario.query.all()
     return render_template('usuarios.html', lista_usuarios=lista_usuarios)
 
 
