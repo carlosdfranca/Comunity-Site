@@ -1,9 +1,45 @@
 {% extends 'base.html' %}
 
 {% block body %}
-
     <div class="container">
-        <h3>AQUI EU VOU CRIAR UM POST</h3>
+        <div class='row d-flex justify-content-center align-items-center pt-5'>
+            <div class='col col-lg-7 mb-4 mb-lg-0'>
+                <form method='POST' action='' class="border p-4 mt-2">
+                    {{ form.csrf_token }}
+                    <legend>Criar Post</legend>
+                    <fieldset>
+                        <div class="form-group pb-2">
+                            {{ form.titulo.label(class="form-control-label") }}
+                            {% if form.titulo.errors %}
+                                {{ form.titulo(class="form-control is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.titulo.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.titulo(class="form-control") }}
+                            {% endif %}
+                        </div>
+                        <div class="form-group">
+                            {{ form.corpo.label(class="form-control-label") }}
+                            {% if form.corpo.errors %}
+                                {{ form.corpo(class="form-control is-invalid") }}
+                                <div class="invalid-feedback">
+                                    {% for error in form.corpo.errors %}
+                                        {{ error }}
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                {{ form.corpo(class="form-control") }}
+                            {% endif %}
+                        </div>
+                    </fieldset>
+                    <div class="d-flex justify-content-end pt-2">
+                        {{ form.botao_submit_criarpost(class="btn btn-dark mt-2") }}
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-
 {% endblock %}
