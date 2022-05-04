@@ -1,5 +1,5 @@
 from fileinput import filename
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, abort
 import flask
 from comunidadeimpressionadora import app, database, Bcrypt
 from comunidadeimpressionadora.forms import FormLogin, FormCriarConta, FormEditarPerfil, FormCriarPost
@@ -172,3 +172,16 @@ def exibir_post(post_id):
         flash('Post Atualizado!', 'alert-success')
         return redirect(url_for('home'))
     return render_template('post.html', post=post, form=form)
+
+
+@app.route('/post/<post_id>/excluir', methods=['GET', 'POST'])
+@login_required
+def excluir_post(post_id):
+    post = Post.query.get(post_id)
+    if current_user == post.author:
+        database.session.delete(post)
+        database.session.commit()
+        flash('O Post foi excluido com sucesso!', 'alert-danger')
+        return redirect(url_for('home'))
+    else:
+        abort(403)
