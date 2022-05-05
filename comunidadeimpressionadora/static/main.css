@@ -25,3 +25,8 @@ background: linear-gradient(to right bottom, rgba(247,247,247), rgba(229,229,229
     border-radius: 50%;
   }
 
+html,body {
+    height: 100%; /* é necessário definir o height 100% no html, body ou qualquer elemento que estiver entre o body e o .container */
+    padding: 0;
+    margin: 0;
+}
