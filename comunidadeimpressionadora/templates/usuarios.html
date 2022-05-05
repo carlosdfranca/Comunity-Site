@@ -5,7 +5,7 @@
     <div class = 'container'>
         <h1>Usuários</h1>
         {% for usuario in lista_usuarios %}
-                <div class="col col-lg-6 mb-4 mb-lg-0">
+                <div class="col col-lg-8 mb-4 mb-lg-0 pb-2">
                     <div class="card mb-3" style="border-radius: .5rem;">
                         <div class="row g-0">
                             <div class="col-md-4 gradient-custom text-center text-white" style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
@@ -45,7 +45,7 @@
                                         </div>
                                         <div class="col-6 mb-3">
                                             <h6>Posts</h6>
-                                            <p class="text-muted">0</p>
+                                            <p class="text-muted">{{ usuario.contar_posts() }}</p>
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-start">
